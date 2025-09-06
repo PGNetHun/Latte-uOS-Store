@@ -1,0 +1,83 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"html.format.wrapLineLength": 200,
+		"editor.wordWrapColumn": 200,
+		"editor.wordWrap": "on",
+		"autopep8.importStrategy": "useBundled",
+		"autopep8.args": [
+			"--max-line-length=200"
+		]
+	},
+	"launch": {
+		"configurations": [
+			{
+				"name": "Launch generic faces preview app",
+				"type": "node",
+				"runtimeExecutable": "${workspaceFolder}/../lv_micropython/ports/unix/build-standard/micropython",
+				"runtimeArgs": [
+					"preview.py"
+				],
+				"request": "launch",
+				"cwd": "${workspaceFolder}/faces/generic-face",
+				"console": "integratedTerminal"
+			}
+		]
+	},
+	"tasks": {
+		"version": "2.0.0",
+		"tasks": [
+			{
+				"label": "Remove unused Font files",
+				"type": "shell",
+				"command": "python3",
+				"args": [
+					"tools/remove_unused_fonts.py",
+					"${workspaceFolder}/fonts",
+					"${workspaceFolder}",
+					"temp,logs,__pycache__"
+				],
+				"presentation": {
+					"echo": true,
+					"reveal": "always",
+					"focus": false,
+					"panel": "shared",
+					"showReuseMessage": false,
+					"clear": true
+				},
+				"runOptions": {
+					"instanceLimit": 1
+				},
+				"problemMatcher": []
+			},
+			{
+				"label": "Generate generic faces preview thumbnails",
+				"type": "shell",
+				"command": "python3",
+				"options": {
+					"cwd": "${workspaceFolder}/faces/generic-face"
+				},
+				"args": [
+					"generate.py",
+					"~/src/lv_micropython/ports/unix/build-standard/micropython"
+				],
+				"presentation": {
+					"echo": true,
+					"reveal": "always",
+					"focus": false,
+					"panel": "shared",
+					"showReuseMessage": false,
+					"clear": true
+				},
+				"runOptions": {
+					"instanceLimit": 1
+				},
+				"problemMatcher": []
+			},
+		]
+	}
+}
