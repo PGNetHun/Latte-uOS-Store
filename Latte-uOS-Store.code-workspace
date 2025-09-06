@@ -18,7 +18,7 @@
 			{
 				"name": "Launch generic faces preview app",
 				"type": "node",
-				"runtimeExecutable": "${workspaceFolder}/../lv_micropython/ports/unix/build-standard/micropython",
+				"runtimeExecutable": "${workspaceFolder}/../lv_micropython/ports/unix/build-lvgl/micropython",
 				"runtimeArgs": [
 					"preview.py"
 				],
@@ -63,7 +63,7 @@
 				},
 				"args": [
 					"generate.py",
-					"~/src/lv_micropython/ports/unix/build-standard/micropython"
+					"${workspaceFolder}/../lv_micropython/ports/unix/build-lvgl/micropython"
 				],
 				"presentation": {
 					"echo": true,

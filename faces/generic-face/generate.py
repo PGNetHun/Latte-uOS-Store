@@ -63,7 +63,7 @@ for filename in existing_files.difference(keep_files):
 
 # Generate faces and take RAW snapshots
 print("Take snapshots of faces")
-subprocess.run([mpy, _PREVIEW_MPY_FILE, "--snapshot-for-all", _SNAPSHOT_EXTENSION, _PREVIEWS_DIRECTORY, _PREVIEW_TIME_CONSTANT])
+subprocess.run([mpy, _PREVIEW_MPY_FILE, "--snapshot-for-all", _SNAPSHOT_EXTENSION, _PREVIEWS_DIRECTORY, _PREVIEW_TIME_CONSTANT], stdout=sys.stdout, stderr=sys.stderr, check=True)
 
 # Convert snapshots to preview image and delete snapshot files
 for name in face_names:

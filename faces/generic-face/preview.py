@@ -241,6 +241,7 @@ class Renderer:
             del x
 
         for x in self._gifs:
+            x.destruct()
             del x
 
         for id, font in self._fonts.items():
@@ -257,6 +258,10 @@ class Renderer:
         self._labels.clear()
         self._fonts.clear()
         self._image_fonts.clear()
+        self._screen.clean()
+        self._screen.invalidate()
+        lv.image.cache_drop(None)
+        gc.collect()
 
     def get_update_interval_ms(self):
         return self._update_interval_ms
@@ -556,7 +561,7 @@ class App():
 
     async def loop(self, face_name=None):
         if face_name and face_name in self._faces and self._path_exists(f"{self._faces_path}/{face_name}"):
-            self._face_selector_dropdown.set_selected(self._faces_filtered.index(face_name))
+            self._face_selector_dropdown.set_selected(self._faces_filtered.index(face_name), False)
             self._show_face(face_name)
         else:
             self._show_menu()
@@ -574,15 +579,20 @@ class App():
     def snapshot_all(self, snapshot_name_postfix, snapshots_path, time_tuple):
         self._show_center_point = False
         for face_name in self._faces:
-            snapshot_file_name = f"{snapshots_path}/{face_name}{snapshot_name_postfix}"
-            self.snapshot(face_name, snapshot_file_name, time_tuple)
-            self._clean_mem()
+            try:
+                snapshot_file_name = f"{snapshots_path}/{face_name}{snapshot_name_postfix}"
+                self.snapshot(face_name, snapshot_file_name, time_tuple)
+            except Exception as e:
+                print(f"Error taking snapshot of face: {face_name}", e)
+            finally:
+                self._clean_mem()
 
     def snapshot(self, face_name, snapshot_file_name, time_tuple):
         if not face_name or not self._path_exists(f"{self._faces_path}/{face_name}"):
             print(f"Face does not exist: {face_name}")
             return
 
+        print(f"Take snapshot of face: {face_name}")
         self._show_center_point = False
         self._face_screen.clean()
         self._show_face(face_name, time_tuple)
@@ -594,7 +604,6 @@ class App():
 
         snapshot.destroy()
         self._renderer.unload()
-        print(f"Snapshot file: {snapshot_file_name} ({size} bytes)")
 
     def _clean_mem(self):
         lv.image.cache_drop(None)
@@ -745,7 +754,7 @@ class App():
     def _reload_face_selector_dropdown(self, selected_face_name):
         self._face_selector_dropdown.set_options("\n".join(self._faces))
         if selected_face_name in self._faces:
-            self._face_selector_dropdown.set_selected(self._faces.index(selected_face_name))
+            self._face_selector_dropdown.set_selected(self._faces.index(selected_face_name), False)
 
     def _exit_button_cb(self, event):
         self._is_running = False
@@ -785,7 +794,7 @@ class App():
             show_other_face = True
 
         if show_other_face:
-            self._face_selector_dropdown.set_selected(index)
+            self._face_selector_dropdown.set_selected(index, False)
             self._show_face(self._faces[index])
         else:
             self._show_menu()

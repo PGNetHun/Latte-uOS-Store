@@ -79,6 +79,8 @@ chip-7
 christmas-01
 christmas-02
 christmas-03
+christmas-04
+christmas-05
 chrome-dino
 city-01
 city-02
